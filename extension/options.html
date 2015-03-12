@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Options</title>
+  <style>
+    label {
+      display: block;
+      color: #777;
+      margin: 0 0 1em;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    label.checkbox,
+    input[type="text"] {
+      color: #000;
+      width: 100%;
+      padding: 4px;
+      letter-spacing: 0;
+    }
+    #status {
+      padding: 0 1em;
+    }
+    fieldset {
+      padding: 1em 1.5em .5em;
+      margin-bottom: 1.25em;
+      border: 2px solid #ddd;
+      background: #efefef;
+      border-radius: 1.5em;
+    }
+    legend {
+      font-weight: bold;
+      font-size: 1.2em;
+      letter-spacing: 1px;
+      background: #fff;
+      padding: .1em 1em;
+      border: 2px solid #ddd;
+      border-radius: 1.5em;
+    }
+  </style>
+</head>
+
+<body>
+  <fieldset>
+    <legend>Mingle</legend>
+    <label>
+      Server
+      <input type="text" id="host" placeholder="http://my.mingle.server:1234">
+    </label>
+    <label>
+      Username
+      <input type="text" id="username">
+    </label>
+    <label>
+      Password
+      <input type="text" id="password">
+    </label>
+    <label>
+      Property to Display (case sensitive)
+      <input type="text" id="property">
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>GitHub</legend>
+    <label>
+      Repository
+      <input type="text" id="repo" placeholder="repository/project">
+    </label>
+    <label class="checkbox"><input type="checkbox" id="links"> Add Mingle Links</label>
+    <label class="checkbox"><input type="checkbox" id="labels"> Add Mingle Labels</label>
+    <label>
+      Label Color<br>
+      <select id="color">
+        <option value="">Mingle Blue</option>
+        <option value="color">Mingle Card Color</option>
+        <option value="propertyColor">Mingle Property Color</option>
+      </select>
+    </label>
+  </fieldset>
+
+  <button id="save">Save</button>  <span id="status"></span>
+
+  <script src="jquery.js"></script>
+  <script src="storage.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

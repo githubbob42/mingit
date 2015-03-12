@@ -1,0 +1,31 @@
+{
+  "name": "mingit",
+  "description": "Add Mingle details to GitHub",
+  "version": "1",
+  "manifest_version": 2,
+  "background": {
+    "persistent": false,
+    "scripts": [
+      "jquery.js",
+      "storage.js",
+      "background.js"
+    ]
+  },
+  "content_scripts": [{
+    "matches": ["https://github.com/*"],
+    "js": [
+      "jquery.js",
+      "storage.js",
+      "content.js"
+    ]
+  }],
+  "permissions": [
+    "storage",
+    "http://*/",
+    "https://*/"
+  ],
+  "options_ui": {
+    "chrome_style": true,
+    "page": "options.html"
+  }
+}
