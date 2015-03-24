@@ -1,5 +1,7 @@
+var store = storage('local');
+
 function mingleAPI(path) {
-  return storage.get('options').then(function (options) {
+  return store.get('options').then(function (options) {
     var settings = {
       url: `${ options.host }/api/v2${ path }`,
       dataType: 'xml',
@@ -12,7 +14,7 @@ function mingleAPI(path) {
 }
 
 function getMingleCardInfo(card) {
-  return storage.get('options').then(function (options) {
+  return store.get('options').then(function (options) {
     return mingleAPI(`/projects/${ card.project }/cards/${ card.number }.xml`).then(function (xml) {
       var $xml = $(xml);
 
@@ -46,7 +48,7 @@ function getMingleCardInfo(card) {
 function setCardColor(card) {
   var key = card.project + '_typeColors';
 
-  return storage.get(key).then(function (colors) {
+  return store.get(key).then(function (colors) {
     if (colors) return colors;
 
     return mingleAPI(`/projects/${ card.project }/card_types.xml`).then(function (xml) {
@@ -66,7 +68,7 @@ function setCardColor(card) {
           return colors;
         }, {});
 
-      return storage.set(key, colors);
+      return store.set(key, colors);
     });
   })
   .then(function (colors) {
@@ -77,7 +79,7 @@ function setCardColor(card) {
 function setCardPropertyColor(card, options) {
   var key = card.project + '_propertyColors';
 
-  return storage.get(key).then(function (colors) {
+  return store.get(key).then(function (colors) {
     if (colors) return colors;
 
     return mingleAPI(`/projects/${ card.project }/property_definitions.xml`).then(function (xml) {
@@ -100,7 +102,7 @@ function setCardPropertyColor(card, options) {
           return colors;
         }, {});
 
-      return storage.set(key, colors);
+      return store.set(key, colors);
     });
   })
   .then(function (colors) {

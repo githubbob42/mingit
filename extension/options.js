@@ -1,3 +1,5 @@
+var store = storage('local');
+
 function save_options() {
   var options = {
     repo: document.getElementById('repo').value,
@@ -10,7 +12,7 @@ function save_options() {
     showLabels: document.getElementById('labels').checked
   };
 
-  storage.set('options', options).then(function () {
+  store.set('options', options).then(function () {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
     status.textContent = 'Options saved';
@@ -32,7 +34,7 @@ function restore_options() {
     showLabels: false
   };
 
-  storage.get('options', defaults).then(function (options) {
+  store.get('options', defaults).then(function (options) {
     document.getElementById('repo').value = options.repo;
     document.getElementById('host').value = options.host;
     document.getElementById('username').value = options.username;

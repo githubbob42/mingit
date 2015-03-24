@@ -1,3 +1,5 @@
+var store = storage('local');
+
 function parseMingleInfo(text) {
   if (!text) return;
 
@@ -90,7 +92,7 @@ function getContrastColor(hexcolor) {
 }
 
 function injectMingle() {
-  storage.get('options').then(function (options) {
+  store.get('options').then(function (options) {
     if (!options) return;
     if (!options.showLinks && !options.showLabels) return;
     if (!window.location.href.match(new RegExp(options.repo, 'i'))) return;

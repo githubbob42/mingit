@@ -1,46 +1,61 @@
-var storage = (function (storageArea) {
+function storage(storageArea) {
+  var store = chrome.storage[storageArea],
+      listeners = {};
 
-  var store = chrome.storage[storageArea];
+  function promisify(method) {
+    var args = Array.prototype.slice.call(arguments);
+    args.shift();
 
-  function executePromise(method, param) {
     return new Promise(function (resolve, reject) {
-      store[method](param, function (result) {
+      args.push(function callback(result) {
         if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
         resolve(result);
       });
+      store[method].apply(store, args);
     });
   }
 
+  chrome.storage.onChanged.addListener(function (changes) {
+    Object.keys(listeners).filter(function (key) {
+      if (changes[key]) {
+        listeners[key].forEach(function (listener) {
+          listener(changes[key].newValue, changes[key].oldValue);
+        });
+      }
+    });
+  });
+
   return {
-    set: function (key, value) {
-      var data = {};
-      data[key] = value;
-      return executePromise('set', data).then(function () {
-        return value;
-      });
-    },
     get: function (key, defaults) {
-      return executePromise('get', key).then(function (data) {
+      return promisify('get', key).then(function (data) {
         return data && data[key] || defaults;
       });
     },
+    set: function (key, value) {
+      var data = {};
+      data[key] = value;
+      return promisify('set', data).then(function () {
+        return value;
+      });
+    },
     remove: function (key) {
-      return executePromise('remove', key);
+      return promisify('remove', key);
+    },
+    update: function (key, changes) {
+      return promisify('get', key).then(function (data) {
+        var value = data[key] || {};
+        for (var prop in changes) {
+          value[prop] = changes[prop];
+        }
+        return promisify('set', value);
+      });
     },
     clear: function () {
-      return new Promise(function (resolve, reject) {
-        store.clear(function () {
-          if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
-          resolve();
-        });
-      });
+      return promisify('clear');
     },
-    upsert: function (key, changes) {
-      return executePromise('get', key).then(function (data) {
-        data[key] = $.extend({}, data[key], changes);
-        return executePromise('set', data);
-      });
+    onChanged: function (key, listener) {
+      if (!listeners[key]) listeners[key] = [];
+      listeners[key].push(listener);
     }
   };
-
-}('local'));
+}
