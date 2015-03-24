@@ -36,7 +36,11 @@ function injectLabel($link, card, color) {
       Mingle ${ card.type } #${ card.number } - ${ card.propertyValue }
     </a>`;
 
-  $link.siblings('.labels').prepend(label);
+  var $labelsContainer = $link.siblings('.labels');
+  if ($labelsContainer.size() === 0) {
+    $labelsContainer = $('<span class="labels" />').insertAfter($link.siblings('.issue-pr-status'));
+  }
+  $labelsContainer.prepend(label);
 }
 
 function injectLink($link, card) {
