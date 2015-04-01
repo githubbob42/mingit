@@ -21,15 +21,13 @@ function getMingleCardInfo(card) {
       $.extend(card, {
         name: $xml.find('card > name').text(),
         type: $xml.find('card > card_type name').text(),
-        propertyValue: getPropertyValue($xml, options.property).text(),
-        url: `${ options.host }/projects/${ card.project }/cards/${ card.number }`
+        url: `${ options.host }/projects/${ card.project }/cards/${ card.number }`,
+        labels: []
       });
 
-      if (options.color === 'mingle') return card;
-      
       return Promise.all([
-        setCardColor(card),
-        setCardPropertyColor(card, options)
+        addPropertyLabel(card, $xml, options.property),
+        addCardLabel(card, $xml)
       ])
       .then(function () {
         return card;
@@ -46,8 +44,8 @@ function getPropertyValue($xml, name) {
     .find('value');
 }
 
-function setCardColor(card) {
-  var key = card.project + '_typeColors';
+function getCardColors(card) {
+  var key = card.project + '_typeColorMap';
 
   return store.get(key).then(function (colors) {
     if (colors) return colors;
@@ -60,7 +58,7 @@ function setCardColor(card) {
           var $node = $(this);
           return {
             name: $node.children('name').text(),
-            color: $node.children('color').text() || '#cccccc'
+            color: $node.children('color').text() || '#5bb2ef'
           };
         })
         .get()
@@ -71,43 +69,59 @@ function setCardColor(card) {
 
       return store.set(key, colors);
     });
-  })
-  .then(function (colors) {
-    card.color = colors[card.type];
   });
 }
 
-function setCardPropertyColor(card, options) {
-  var key = card.project + '_propertyColors';
+function getCardPropertyColors(card) {
+  var key = card.project + '_propertyColorMap';
 
   return store.get(key).then(function (colors) {
     if (colors) return colors;
 
+    var colors = {};
+
     return mingleAPI(`/projects/${ card.project }/property_definitions.xml`).then(function (xml) {
-      var $xml = $(xml);
-      var colors = $xml
-        .find(`property_definitions > property_definition name`)
-        .filter(function () { return $(this).text() === options.property; })
-        .parent()
-        .find('property_value_details > property_value')
-        .map(function () {
-          var $node = $(this);
-          return {
-            value: $node.children('value').text(),
-            color: $node.children('color').text() || '#cccccc'
-          };
-        })
-        .get()
-        .reduce(function (colors, type) {
-          colors[type.value] = type.color;
-          return colors;
-        }, {});
+      $(xml)
+        .find('property_definitions > property_definition name').get()
+        .forEach(function (node) {
+          var $prop = $(node);
+          var name = $prop.text();
+          var values = $prop.parent().find('property_value_details > property_value').get();
+          colors[name] = {};
+
+          values.forEach(function (node) {
+            var $node = $(node);
+            var value = $node.children('value').text();
+            var color = $node.children('color').text();
+            colors[name][value] = color || '#5bb2ef';
+          });
+        });
 
       return store.set(key, colors);
     });
-  })
-  .then(function (colors) {
-    card.propertyColor = colors[card.propertyValue];
+  });
+}
+
+function addCardLabel(card, $xml) {
+  return getCardColors(card).then(function (colors) {
+    var label = {
+      name: 'Mingle',
+      value: card.type + ' #' + card.number,
+      color: colors[card.type]
+    };
+    card.labels.push(label);
+  });
+}
+
+function addPropertyLabel(card, $xml, property) {
+  return getCardPropertyColors(card).then(function (colors) {
+    var value = getPropertyValue($xml, property).text();
+    var label = {
+      name: property,
+      value: value,
+      color: colors[property][value]
+    };
+    card.labels.push(label);
   });
 }
 

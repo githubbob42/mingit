@@ -7,7 +7,7 @@ function save_options() {
     username: document.getElementById('username').value,
     password: document.getElementById('password').value,
     property: document.getElementById('property').value,
-    color: $('#color').val(),
+    colors: document.getElementById('colors').checked,
     showLinks: document.getElementById('links').checked,
     showLabels: document.getElementById('labels').checked
   };
@@ -29,7 +29,7 @@ function restore_options() {
     username: '',
     password: '',
     property: 'Status',
-    color: '',
+    colors: false,
     showLinks: true,
     showLabels: false
   };
@@ -40,7 +40,7 @@ function restore_options() {
     document.getElementById('username').value = options.username;
     document.getElementById('password').value = options.password;
     document.getElementById('property').value = options.property;
-    $('#color').val(options.color);
+    document.getElementById('colors').checked = options.colors;
     document.getElementById('links').checked = options.showLinks;
     document.getElementById('labels').checked = options.showLabels;
   });

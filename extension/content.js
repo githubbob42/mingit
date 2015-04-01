@@ -20,27 +20,30 @@ function updateList(options) {
 
     chrome.runtime.sendMessage({ mingle: mingle }, function (card) {
       if (options.showLinks) injectLink($link, card);
-      if (options.showLabels) injectLabel($link, card, options.color);
+      if (options.showLabels) injectLabel($link, card, options.colors);
       if (options.showLinks || options.showLabels) $link.text(card.name);
     });
   });
 }
 
-function injectLabel($link, card, color) {
-  var bgColor = card[color] || '#5bb2ef',
-      textColor = card[color] && getContrastColor(card[color]) || '#fff';
-  
-  var label = `
-    <a target="mingle" href="${ card.url }" class="label"
-      style="background: ${ bgColor }; color: ${ textColor }; white-space: nowrap">
-      Mingle ${ card.type } #${ card.number } - ${ card.propertyValue }
-    </a>`;
-
+function injectLabel($link, card, useColors) {
   var $labelsContainer = $link.siblings('.labels');
   if ($labelsContainer.size() === 0) {
     $labelsContainer = $('<span class="labels" />').insertAfter($link.siblings('.issue-pr-status'));
   }
-  $labelsContainer.prepend(label);
+
+  card.labels.forEach(function (label) {
+    var bgColor = useColors ? label.color : '#5bb2ef',
+        textColor = useColors ? getContrastColor(label.color) : '#fff';
+
+    var label = `
+      <a target="mingle" href="${ card.url }" class="label"
+        style="background: ${ bgColor }; color: ${ textColor }; white-space: nowrap">
+        <span style="background: #666; color: #fff; padding: 3px 5px; margin: 0 2px 0 -4px; border-radius: 2px 0 0 2px; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.12)">${ label.name }</span> ${ label.value }
+      </a>`;
+
+    $labelsContainer.prepend(label);
+  });
 }
 
 function injectLink($link, card) {
@@ -48,10 +51,7 @@ function injectLink($link, card) {
     <div class="issue-meta">
       <span class="issue-meta-section">
         <a target="mingle" href="${ card.url }">
-          <strong>
-            ${ card.propertyValue }
-          </strong>
-          - Mingle ${ card.type } #${ card.number }
+          Mingle ${ card.type } #${ card.number }
         </a>
       </span>
     </div>`;
