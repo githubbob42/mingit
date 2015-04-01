@@ -18,17 +18,10 @@ function getMingleCardInfo(card) {
     return mingleAPI(`/projects/${ card.project }/cards/${ card.number }.xml`).then(function (xml) {
       var $xml = $(xml);
 
-      var propertyValue = $xml
-        .find('card > properties > property name')
-        .filter(function () { return $(this).text() === options.property; })
-        .parent()
-        .find('value')
-        .text();
-
       $.extend(card, {
         name: $xml.find('card > name').text(),
         type: $xml.find('card > card_type name').text(),
-        propertyValue: propertyValue,
+        propertyValue: getPropertyValue($xml, options.property).text(),
         url: `${ options.host }/projects/${ card.project }/cards/${ card.number }`
       });
 
@@ -43,6 +36,14 @@ function getMingleCardInfo(card) {
       });
     });
   });
+}
+
+function getPropertyValue($xml, name) {
+  return $xml
+    .find('card > properties > property name')
+    .filter(function () { return $(this).text() === name; })
+    .parent()
+    .find('value');
 }
 
 function setCardColor(card) {
