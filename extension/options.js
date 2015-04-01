@@ -26,8 +26,6 @@ function restore_options() {
   var defaults = {
     repo: '',
     host: '',
-    username: '',
-    password: '',
     properties: '',
     colors: false,
     showLinks: true,

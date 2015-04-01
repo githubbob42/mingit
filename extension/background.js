@@ -4,10 +4,7 @@ function mingleAPI(path) {
   return store.get('options').then(function (options) {
     var settings = {
       url: `${ options.host }/api/v2${ path }`,
-      dataType: 'xml',
-      headers: {
-        'Authorization': 'Basic ' + btoa(options.username + ':' + options.password)
-      }
+      dataType: 'xml'
     };
     return Promise.resolve($.ajax(settings));
   });
