@@ -48,14 +48,15 @@ function injectLabel($link, card, useColors) {
 
 function injectLink($link, card) {
   var properties = card.labels.map(function (label) {
-    return `<span style="white-space: nowrap; margin-right: 1.5em;">${ label.name }: <strong>${ label.value }</strong></span>`;
+    return `
+      <a target="mingle" href="${ card.url }" class="tooltipped tooltipped-w" aria-label="View Mingle Card" style="flex: 1; text-decoration: none; white-space: nowrap; color: #5bb2ef;">
+        ${ label.name }: <strong>${ label.value }</strong>
+      </a>`;
   }).join('');
 
   var link = `
-    <a class="issue-meta" target="mingle" href="${ card.url }" style="display:block; text-decoration: none; background: #EEF7FF; color: #4183c4; padding: 5px 8px; border: 1px solid #def; border-radius: 3px">
-      <span class="issue-meta-section">
-        ${ properties }
-      </span>
+    <div class="issue-meta" style="display: flex">
+      ${ properties }
     </div>`;
 
   $link.parent().append(link);
@@ -76,7 +77,7 @@ function updateDetails() {
       var header = `
         <div class="flex-table gh-header-meta">
           <div class="flex-table-item">
-            <a class="state state-open" target="mingle" href="${ card.url }" style="background: #5bb2ef">
+            <a target="mingle" href="${ card.url }" class="tooltipped tooltipped-n state state-open" aria-label="View Mingle Card" style="text-decoration: none; background: #5bb2ef">
               <span class="octicon octicon-link-external"></span> Mingle ${ card.type } #${ card.number }
             </a>
           </div>
