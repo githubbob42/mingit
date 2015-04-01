@@ -6,7 +6,7 @@ function save_options() {
     host: document.getElementById('host').value,
     username: document.getElementById('username').value,
     password: document.getElementById('password').value,
-    property: document.getElementById('property').value,
+    properties: document.getElementById('properties').value,
     colors: document.getElementById('colors').checked,
     showLinks: document.getElementById('links').checked,
     showLabels: document.getElementById('labels').checked
@@ -28,7 +28,7 @@ function restore_options() {
     host: '',
     username: '',
     password: '',
-    property: 'Status',
+    properties: '',
     colors: false,
     showLinks: true,
     showLabels: false
@@ -39,7 +39,7 @@ function restore_options() {
     document.getElementById('host').value = options.host;
     document.getElementById('username').value = options.username;
     document.getElementById('password').value = options.password;
-    document.getElementById('property').value = options.property;
+    document.getElementById('properties').value = options.properties;
     document.getElementById('colors').checked = options.colors;
     document.getElementById('links').checked = options.showLinks;
     document.getElementById('labels').checked = options.showLabels;

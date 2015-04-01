@@ -32,7 +32,7 @@ function injectLabel($link, card, useColors) {
     $labelsContainer = $('<span class="labels" />').insertAfter($link.siblings('.issue-pr-status'));
   }
 
-  card.labels.forEach(function (label) {
+  card.labels.reverse().forEach(function (label) {
     var bgColor = useColors ? label.color : '#5bb2ef',
         textColor = useColors ? getContrastColor(label.color) : '#fff';
 
@@ -47,12 +47,14 @@ function injectLabel($link, card, useColors) {
 }
 
 function injectLink($link, card) {
+  var properties = card.labels.map(function (label) {
+    return `<span style="white-space: nowrap; margin-right: 1.5em;">${ label.name }: <strong>${ label.value }</strong></span>`;
+  }).join('');
+
   var link = `
-    <div class="issue-meta">
+    <a class="issue-meta" target="mingle" href="${ card.url }" style="display:block; text-decoration: none; background: #EEF7FF; color: #4183c4; padding: 5px 8px; border: 1px solid #def; border-radius: 3px">
       <span class="issue-meta-section">
-        <a target="mingle" href="${ card.url }">
-          Mingle ${ card.type } #${ card.number }
-        </a>
+        ${ properties }
       </span>
     </div>`;
 
@@ -66,6 +68,11 @@ function updateDetails() {
     if (!mingle) return;
 
     chrome.runtime.sendMessage({ mingle: mingle }, function (card) {
+      card.labels.shift();
+      var properties = card.labels.map(function (label) {
+        return `<span style="white-space: nowrap; margin-right: 1.5em;">${ label.name }: <strong>${ label.value }</strong></span>`;
+      }).join('');
+
       var header = `
         <div class="flex-table gh-header-meta">
           <div class="flex-table-item">
@@ -73,7 +80,7 @@ function updateDetails() {
               <span class="octicon octicon-link-external"></span> Mingle ${ card.type } #${ card.number }
             </a>
           </div>
-          <div class="flex-table-item flex-table-item-primary">${ card.propertyValue }</div>
+          <div class="flex-table-item flex-table-item-primary">${ properties }</div>
         </div>`;
 
       $('.gh-header-edit').after(header);
