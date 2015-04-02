@@ -37,7 +37,7 @@ function injectLabel($link, card, useColors) {
         textColor = useColors ? getContrastColor(label.color) : '#fff';
 
     var label = `
-      <a class="mingit label" target="mingle" href="${ card.url }" style="background-color: #ededed; color: #333333;">
+      <a class="mingit label tooltipped tooltipped-n" target="mingle" href="${ card.url }" style="background-color: #ededed; color: #333333;" aria-label="View Mingle Card">
         <span class="mingit-property">${ label.name } <strong style="background-image: linear-gradient(to right, #ededed, ${ bgColor } 6px); color: ${ textColor }">${ label.value }</strong></span>
       </a>`;
 
@@ -47,16 +47,13 @@ function injectLabel($link, card, useColors) {
 
 function injectLink($link, card) {
   var properties = card.labels.map(function (label) {
-    return `
-      <a class="mingit-property tooltipped tooltipped-w" target="mingle" href="${ card.url }" aria-label="View Mingle Card">
-        ${ label.name }: <strong>${ label.value }</strong>
-      </a>`;
+    return `<div class="mingit-property">${ label.name }: <strong>${ label.value }</strong></div>`;
   }).join('');
 
   var link = `
-    <div class="mingit issue-meta">
+    <a class="mingit issue-meta tooltipped tooltipped-w" target="mingle" href="${ card.url }" aria-label="View Mingle Card">
       ${ properties }
-    </div>`;
+    </a>`;
 
   $link.parent().append(link);
 }
@@ -74,9 +71,9 @@ function updateDetails() {
       }).join('');
 
       var header = `
-        <div class="mingit flex-table gh-header-meta">
+        <div class="flex-table gh-header-meta">
           <div class="flex-table-item">
-            <a target="mingle" href="${ card.url }" class="tooltipped tooltipped-n state state-open" aria-label="View Mingle Card">
+            <a target="mingle" href="${ card.url }" class="mingit state tooltipped tooltipped-n" aria-label="View Mingle Card">
               <span class="octicon octicon-link-external"></span> Mingle ${ card.type } #${ card.number }
             </a>
           </div>
