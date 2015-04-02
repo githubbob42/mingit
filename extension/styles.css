@@ -7,6 +7,8 @@
 
 .mingit.issue-meta {
   display: flex;
+  padding-top: 5px;
+  border-top: 1px dashed #ededed;
 }
 .mingit.issue-meta > * {
   flex: 1;
