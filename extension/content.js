@@ -37,9 +37,8 @@ function injectLabel($link, card, useColors) {
         textColor = useColors ? getContrastColor(label.color) : '#fff';
 
     var label = `
-      <a target="mingle" href="${ card.url }" class="label"
-        style="background: ${ bgColor }; color: ${ textColor }; white-space: nowrap">
-        <span style="background: #666; color: #fff; padding: 3px 5px; margin: 0 2px 0 -4px; border-radius: 2px 0 0 2px; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.12)">${ label.name }</span> ${ label.value }
+      <a class="mingit label" target="mingle" href="${ card.url }" style="background-color: #ededed; color: #333333;">
+        <span class="mingit-property">${ label.name } <strong style="background-image: linear-gradient(to right, #ededed, ${ bgColor } 6px); color: ${ textColor }">${ label.value }</strong></span>
       </a>`;
 
     $labelsContainer.prepend(label);
@@ -49,13 +48,13 @@ function injectLabel($link, card, useColors) {
 function injectLink($link, card) {
   var properties = card.labels.map(function (label) {
     return `
-      <a target="mingle" href="${ card.url }" class="tooltipped tooltipped-w" aria-label="View Mingle Card" style="flex: 1; text-decoration: none; white-space: nowrap; color: #5bb2ef;">
+      <a class="mingit-property tooltipped tooltipped-w" target="mingle" href="${ card.url }" aria-label="View Mingle Card">
         ${ label.name }: <strong>${ label.value }</strong>
       </a>`;
   }).join('');
 
   var link = `
-    <div class="issue-meta" style="display: flex">
+    <div class="mingit issue-meta">
       ${ properties }
     </div>`;
 
@@ -71,13 +70,13 @@ function updateDetails() {
     chrome.runtime.sendMessage({ mingle: mingle }, function (card) {
       card.labels.shift();
       var properties = card.labels.map(function (label) {
-        return `<span style="white-space: nowrap; margin-right: 1.5em;">${ label.name }: <strong>${ label.value }</strong></span>`;
+        return `<span class="mingit-property">${ label.name }: <strong>${ label.value }</strong></span>`;
       }).join('');
 
       var header = `
-        <div class="flex-table gh-header-meta">
+        <div class="mingit flex-table gh-header-meta">
           <div class="flex-table-item">
-            <a target="mingle" href="${ card.url }" class="tooltipped tooltipped-n state state-open" aria-label="View Mingle Card" style="text-decoration: none; background: #5bb2ef">
+            <a target="mingle" href="${ card.url }" class="tooltipped tooltipped-n state state-open" aria-label="View Mingle Card">
               <span class="octicon octicon-link-external"></span> Mingle ${ card.type } #${ card.number }
             </a>
           </div>

@@ -17,6 +17,9 @@
       "jquery.js",
       "storage.js",
       "content.js"
+    ],
+    "css": [
+      "styles.css"
     ]
   }],
   "permissions": [
