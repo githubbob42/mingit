@@ -4,8 +4,6 @@ function save_options() {
   var options = {
     repo: document.getElementById('repo').value,
     host: document.getElementById('host').value,
-    username: document.getElementById('username').value,
-    password: document.getElementById('password').value,
     properties: document.getElementById('properties').value,
     colors: document.getElementById('colors').checked,
     showLinks: document.getElementById('links').checked,
@@ -35,8 +33,6 @@ function restore_options() {
   store.get('options', defaults).then(function (options) {
     document.getElementById('repo').value = options.repo;
     document.getElementById('host').value = options.host;
-    document.getElementById('username').value = options.username;
-    document.getElementById('password').value = options.password;
     document.getElementById('properties').value = options.properties;
     document.getElementById('colors').checked = options.colors;
     document.getElementById('links').checked = options.showLinks;
