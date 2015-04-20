@@ -80,7 +80,7 @@ function updateDetails() {
           <div class="flex-table-item flex-table-item-primary">${ properties }</div>
         </div>`;
 
-      $('.gh-header-edit').after(header);
+      $('#partial-discussion-header').append(header);
       $title.text(card.name);
     });
 
