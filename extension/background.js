@@ -23,7 +23,7 @@ function getMingleCardInfo(card) {
       });
 
       return Promise.all([
-        addCardLabel(card, $xml),
+        addCardLabel(card),
         addPropertyLabels(card, $xml, options)
       ])
       .then(function () {
@@ -105,7 +105,7 @@ function getCardPropertyColors(card) {
   });
 }
 
-function addCardLabel(card, $xml) {
+function addCardLabel(card) {
   return getCardColors(card).then(function (colors) {
     var label = {
       name: 'Mingle',
