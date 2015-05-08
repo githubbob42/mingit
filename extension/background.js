@@ -24,12 +24,30 @@ function getMingleCardInfo(card) {
 
       return Promise.all([
         addCardLabel(card),
+        addCardTransitions(card),
         addPropertyLabels(card, $xml, options)
       ])
       .then(function () {
         return card;
       });
     });
+  });
+}
+
+function addCardTransitions(card) {
+  // TODO: support user input for transitions
+  return mingleAPI(`/projects/${ card.project }/cards/${ card.number }/transitions.xml`).then(function (xml) {
+    var $xml = $(xml);
+    card.transitions = $xml
+      .find(`transitions > transition`)
+      .map(function () {
+        var $node = $(this);
+        return {
+          id: $node.children('id').text(),
+          name: $node.children('name').text()
+        };
+      })
+      .get();
   });
 }
 
