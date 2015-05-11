@@ -30,9 +30,9 @@
   border-radius: 4px;
 }
 
-.gh-header-meta .mingit {
-  background: #5bb2ef;
+.gh-header-meta button.mingit {
+  padding: 4px 8px;
 }
 .gh-header-meta .mingit-property {
-  margin-right: 1.5em;
+  margin: 0 .75em;
 }
