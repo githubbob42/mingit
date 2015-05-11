@@ -160,9 +160,17 @@ function addPropertyLabels(card, $xml, options) {
   });
 }
 
+function executeTransition(params) {
+  return mingleAPI(`/projects/${ params.project }/transition_executions/${ params.id }.xml?transition_execution[card]=${ params.card }`, 'POST');
+}
+
 chrome.runtime.onMessage.addListener(function (request, sender, callback) {
   if (request.mingle) {
     getMingleCardInfo(request.mingle).then(callback);
+    return true; // make sure we wait for asynchronously executed callback
+  }
+  if (request.transition) {
+    executeTransition(request.transition).then(callback);
     return true; // make sure we wait for asynchronously executed callback
   }
 });
