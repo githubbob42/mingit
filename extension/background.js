@@ -6,6 +6,11 @@ function mingleAPI(path) {
       url: `${ options.host }/api/v2${ path }`,
       dataType: 'xml'
     };
+    if (options.username && options.password) {
+      settings.headers = {
+        'Authorization': 'Basic ' + btoa(options.username + ':' + options.password)
+      };
+    }
     return Promise.resolve($.ajax(settings));
   });
 }
