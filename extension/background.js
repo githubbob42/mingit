@@ -1,10 +1,11 @@
 var store = storage('local');
 
-function mingleAPI(path) {
+function mingleAPI(path, method) {
   return store.get('options').then(function (options) {
     var settings = {
       url: `${ options.host }/api/v2${ path }`,
-      dataType: 'xml'
+      dataType: 'xml',
+      method: method || 'GET'
     };
     if (options.username && options.password) {
       settings.headers = {
