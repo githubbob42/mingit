@@ -165,8 +165,8 @@ function executeTransition(params) {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, callback) {
-  if (request.mingle) {
-    getMingleCardInfo(request.mingle).then(callback);
+  if (request.card) {
+    getMingleCardInfo(request.card).then(callback);
     return true; // make sure we wait for asynchronously executed callback
   }
   if (request.transition) {

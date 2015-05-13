@@ -14,11 +14,12 @@ function parseMingleInfo(text) {
 
 function updateList(options) {
   $('.issue-title-link').each(function (i, link) {
-    var $link = $(link);
-    var mingle = parseMingleInfo($link.text());
-    if (!mingle) return;
+    var $link = $(link),
+        params = parseMingleInfo($link.text());
 
-    chrome.runtime.sendMessage({ mingle: mingle }, function (card) {
+    if (!params) return;
+
+    chrome.runtime.sendMessage({ card: params }, function (card) {
       if (options.showLinks) injectLink($link, card);
       if (options.showLabels) injectLabel($link, card, options.colors);
       if (options.showLinks || options.showLabels) $link.text(card.name);
@@ -61,10 +62,10 @@ function injectLink($link, card) {
 function updateDetails(options) {
   $('.js-issue-title').each(function (i, title) {
     var $title = $(title);
-    var mingle = parseMingleInfo($title.text());
-    if (!mingle) return;
+    var params = parseMingleInfo($title.text());
+    if (!params) return;
 
-    chrome.runtime.sendMessage({ mingle: mingle }, function (card) {
+    chrome.runtime.sendMessage({ card: params }, function (card) {
       card.labels.shift();
       var properties = card.labels.map(function (label) {
         return `<span class="mingit-property">${ label.name }: <strong>${ label.value }</strong></span>`;
