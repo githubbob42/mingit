@@ -170,7 +170,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, callback) {
     return true; // make sure we wait for asynchronously executed callback
   }
   if (request.transition) {
-    executeTransition(request.transition).then(callback);
-    return true; // make sure we wait for asynchronously executed callback
+    executeTransition(request.transition).then(function () {
+      chrome.tabs.reload();
+    });
   }
 });

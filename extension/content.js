@@ -120,8 +120,7 @@ function handleTransition(e) {
   var $btn = $(e.currentTarget),
       params = $btn.data();
 
-  chrome.runtime.sendMessage({ transition: params }, window.location.reload);
-
+  chrome.runtime.sendMessage({ transition: params });
   e.preventDefault();
   e.stopPropagation();
   return false;
