@@ -13,7 +13,7 @@ function parseMingleInfo(text) {
 }
 
 function updateList(options) {
-  $('.issue-title-link').each(function (i, link) {
+  $('.Box-row-link').each(function (i, link) {
     var $link = $(link),
         params = parseMingleInfo($link.text());
 
